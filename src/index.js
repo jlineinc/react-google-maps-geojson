@@ -4,6 +4,7 @@ import GoogleMapsLoader from 'google-maps'
 import GoogleMapInternal from './GoogleMapInternal'
 
 export {default as FeatureLayer} from './FeatureLayer'
+export {default as DataPolygonLayer } from './DataPolygonLayer'
 
 export const GoogleAPIContext = React.createContext({
   google: null,
