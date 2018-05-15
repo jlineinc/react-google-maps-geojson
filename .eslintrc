@@ -1,11 +1,12 @@
 {
   "parser": "babel-eslint",
   "extends": [
-    "standard",
-    "standard-react"
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
   "env": {
-    "es6": true
+    "es6": true,
+    "browser": true
   },
   "plugins": [
     "react"
@@ -15,9 +16,7 @@
     "allowImportExportEverywhere": true
   },
   "rules": {
-    "space-before-function-paren": 0,
-    "react/jsx-boolean-value": 0,
-    "import/first": 0,
-    "react/prop-types": 1
+    "no-unused-vars": "warn",
+    "no-console": "warn"
   }
 }
