@@ -5,10 +5,7 @@ import _ from 'lodash';
 import assert from 'assert';
 
 
-export const GEOM_DEFAULTS = {
-  STROKE_WEIGHT : 1,
-  STROKE_COLOR: '#a1d0c6',
-  FILL_OPACITY: 0,
+const GEOM_DEFAULTS = {
   HOVER_FILL_OPACITY: 0.3,
   HOVER_FILL_COLOR : '#67b3a3',
 }
@@ -25,13 +22,15 @@ class FeatureLayer extends Component {
   }
   
   static propTypes = {
-    google: PropTypes.object,
-    map: PropTypes.object,
+    google: PropTypes.object.isRequired,
+    map: PropTypes.object.isRequired,
 
     geom: PropTypes.object,
     featureStyles: PropTypes.instanceOf(Map),
     geomIdColumn: PropTypes.string,
   
+    pointStyle: PropTypes.object,
+
     onFeatureClick: PropTypes.func,
     onFeatureHover: PropTypes.func,
     onFeatureOut: PropTypes.func,
@@ -43,14 +42,14 @@ class FeatureLayer extends Component {
 
 
   getFeatureId = (feature) => {
-    return feature.properties[this.props.geomIdColumn]
+    assert(this.props.geomIdColumn || feature.id, 'If geomIdColumn not specified geoJSON must contain id key.')
+    return this.props.geomIdColumn ? feature.properties[this.props.geomIdColumn] : feature.id
   }
 
       
   calcStyle = feature  => {
     let defaultStyle;
     const google = this.props.google
-
     switch(feature.getGeometry().getType()){
       case "Polygon":
       case "MultiPolygon":
@@ -61,14 +60,14 @@ class FeatureLayer extends Component {
         }
         break
       case "Point":
-        defaultStyle = {
+        defaultStyle = this.props.pointStyle || {
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
             fillColor: '#fff',
             fillOpacity: 1,
             strokeColor: '#000',
             strokeWeight: 3,
-            anchor: new google.maps.Point(3,3)
+            scale: 5
           }
         }
         break
@@ -91,6 +90,7 @@ class FeatureLayer extends Component {
   // OK if geom is null
   renderGeom = () => {
     const geom = this.props.geom;
+
     if(geom){
       const oldMap = this._featuresMap
       const newMap = new Map(geom.features.map(feature => [this.getFeatureId(feature), feature]))
@@ -132,9 +132,9 @@ class FeatureLayer extends Component {
   // OK if geom not loaded (if(feature) returns null)
   // OK if either newStyles or oldStyles is undefined
   // Passing in oldStyles = undefined forces all features to be updated.
-  renderStyles = (prevProps) => {
+  renderStyles = (prevStyles) => {
     const newStyles = this.props.featureStyles || new Map();
-    const oldStyles = prevProps.featureStyles || new Map();
+    const oldStyles = prevStyles || new Map();
 
     for(let [id] of oldStyles){
       if(!newStyles.has(id)){
@@ -191,16 +191,26 @@ class FeatureLayer extends Component {
         }  
       });     
     }
+
+    // If geom already available
+    if(this.props.geom){
+      console.log('geom available at start')
+      this.renderGeom()
+    }
+
+    if(this.props.featureStyles){
+      console.log('featureStyles available at start')
+      this.renderStyles(null);
+    }
   }
 
   componentDidUpdate(prevProps){
-    // Map always defined
     if(this.props.geom !== prevProps.geom){
       this.renderGeom();
     } 
     
     if(this.props.featureStyles !== prevProps.featureStyles){
-      this.renderStyles(prevProps);
+      this.renderStyles(prevProps.featureStyles);
     }
   }
 

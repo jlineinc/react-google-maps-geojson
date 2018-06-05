@@ -58,7 +58,11 @@ class DataPolygonLayer extends PureComponent {
   static defaultProps = {
     palette: "sequential",
     dataIdColumn: "id",
-    dataValueColumn: "value"
+    dataValueColumn: "value",
+    
+    highlightedFeatures: new Set(),
+    outlinedFeatures: new Set()
+
   }
 
   static getDerivedStateFromProps(nextProps, prevState){  

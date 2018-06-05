@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 
 const defaultStyle = {
   container: {
-    width: '100%',
-    height: '100%',
     position: 'relative'
   },
   map: {
@@ -41,6 +39,7 @@ export default class GoogleMapInternal extends Component {
     visible: PropTypes.bool,
     style: PropTypes.object,
     containerStyle: PropTypes.object,
+    containerClassName: PropTypes.string,
     mapOptions: PropTypes.object // Additional options passed directly to google map
   }
 
@@ -53,6 +52,12 @@ export default class GoogleMapInternal extends Component {
       }
     },
     visible: true
+  }
+
+  componentDidMount(){
+    if(this.props.google){
+      this.loadMap()
+    }
   }
   
   componentDidUpdate(prevProps, prevState) {
@@ -145,8 +150,8 @@ export default class GoogleMapInternal extends Component {
     );
 
     return (
-      <div style={containerStyles} className={this.props.className}>
-        <div style={style} ref={this._mapRef}>
+      <div style={containerStyles} className={this.props.containerClassName}> 
+        <div style={style} className={this.props.className} ref={this._mapRef}>
           Loading map...
           </div>
         {this.state.map && childrenWithProps}
