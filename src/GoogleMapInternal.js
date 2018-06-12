@@ -110,11 +110,6 @@ export default class GoogleMapInternal extends Component {
     // Create Map and run fitBounds if needed
     const map = new google.maps.Map(node, mapOptions)
 
-    /*
-    if (bounds) {
-      map.fitBounds(bounds);
-    }
-    */
 
     // Bind click event
     map.addListener('click', e => {
@@ -145,16 +140,19 @@ export default class GoogleMapInternal extends Component {
 
     const containerStyles = {...defaultStyle.container, ...this.props.containerStyle}
 
-    var childrenWithProps = React.Children.map(this.props.children, child => child &&
-      React.cloneElement(child, { map: this.state.map, google: this.props.google })
-    );
+    var childrenWithProps = null
+    if(this.props.google && this.state.map){
+      childrenWithProps = React.Children.map(this.props.children, child => child &&
+        React.cloneElement(child, { map: this.state.map, google: this.props.google })
+      );
+    }
 
     return (
       <div style={containerStyles} className={this.props.containerClassName}> 
         <div style={style} className={this.props.className} ref={this._mapRef}>
           Loading map...
-          </div>
-        {this.state.map && childrenWithProps}
+        </div>
+        {childrenWithProps}
       </div>
     )
   }
