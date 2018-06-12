@@ -563,6 +563,42 @@ GoogleMapInternal.defaultProps = {
   visible: true
 };
 
+var Marker = function (_Component) {
+  inherits(Marker, _Component);
+
+  function Marker() {
+    classCallCheck(this, Marker);
+    return possibleConstructorReturn(this, (Marker.__proto__ || Object.getPrototypeOf(Marker)).apply(this, arguments));
+  }
+
+  createClass(Marker, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var google = this.props.google;
+
+      this._marker = google.maps.Marker({
+        position: this.props.position,
+        map: this.props.map
+      });
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps) {
+      if (this.props.position !== prevProps.position) {
+        this._marker.setPosition(this.props.position);
+      }
+    }
+  }]);
+  return Marker;
+}(React.Component);
+
+Marker.propTypes = {
+  google: PropTypes.object.isRequired,
+  map: PropTypes.object.isRequired,
+
+  position: PropTypes.object
+};
+
 var helpers = createCommonjsModule(function (module, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
@@ -21903,5 +21939,6 @@ var GoogleMap = function GoogleMap(props) {
 exports.GoogleAPIContext = GoogleAPIContext;
 exports.GoogleAPIProvider = GoogleAPIProvider;
 exports.GoogleMap = GoogleMap;
+exports.Marker = Marker;
 exports.FeatureLayer = FeatureLayer;
 exports.DataPolygonLayer = DataPolygonLayer;

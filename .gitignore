@@ -61,6 +61,6 @@ typings/
 .next
 
 .editorconfig
-#dist/
+dist/
 example/build/
 

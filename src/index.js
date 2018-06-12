@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import GoogleMapsLoader from 'google-maps'
 import GoogleMapInternal from './GoogleMapInternal'
 
+export {default as Marker} from './Marker'
 export {default as FeatureLayer} from './FeatureLayer'
 export {default as DataPolygonLayer} from './DataPolygonLayer'
 
