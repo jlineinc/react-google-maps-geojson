@@ -17,7 +17,7 @@
     "prepare": "npm run build",
     "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/build",
-    "postinstall" : "rollup -c"
+    "postinstall" : "npm install && npm run build"
   },
   "dependencies": {
     "@turf/helpers": "^6.1.3",
