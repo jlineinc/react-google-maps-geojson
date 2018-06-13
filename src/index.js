@@ -42,4 +42,4 @@ export const GoogleMap = props => (
   <GoogleAPIContext.Consumer>
     {ctx => <GoogleMapInternal {...props} {...ctx} />}
   </GoogleAPIContext.Consumer>
-);
+)
