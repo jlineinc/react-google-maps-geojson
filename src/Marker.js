@@ -27,7 +27,7 @@ class Marker extends Component {
 
   componentDidMount(){
     const google = this.props.google
-    
+    console.log('mounting marker')
     this._marker = new google.maps.Marker(_.omit(this.props, ['google']))
   }
 
@@ -37,6 +37,10 @@ class Marker extends Component {
     }
   }
 
+  componentWillUnmount(){
+    console.log('unmounting marker')
+    this._marker.setMap(null);
+  }
 
   render(){
     return null // noop
