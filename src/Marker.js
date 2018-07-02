@@ -27,7 +27,7 @@ class Marker extends Component {
   }
 
   static defaultProps = {
-    listeners: []
+    listeners: {}
   }
 
   componentDidMount(){
