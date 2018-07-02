@@ -22,18 +22,41 @@ class Marker extends Component {
     shape: PropTypes.object,
     title: PropTypes.string,
     visible: PropTypes.bool,
-    zIndex: PropTypes.number
+    zIndex: PropTypes.number,
+    listeners: PropTypes.object
+  }
+
+  static defaultProps = {
+    listeners: []
   }
 
   componentDidMount(){
     const google = this.props.google
     console.log('mounting marker')
     this._marker = new google.maps.Marker(_.omit(this.props, ['google']))
+
+    // Add listeners (init)
+    for(const [key, val] of Object.entries(this.props.listeners)){
+      this._marker.addListener(key, val)
+    }
   }
 
   componentDidUpdate(prevProps){
+    const {google} = this.props
     if(this.props !== prevProps){
-      this._marker.setOptions(_.omit(this.props, ['google', 'map']))
+      this._marker.setOptions(_.omit(this.props, ['google', 'map', 'listeners']))
+    }
+
+    if(this.props.listeners !== prevProps.listeners){
+      // Clear all existing listeners
+      for(const key of Object.keys(this.props.listeners)){
+        google.maps.event.clearListeners(this._marker, key);
+      }
+    
+      // Add (re-add) listeners
+      for(const [key, val] of Object.entries(this.props.listeners)){
+        this._marker.addListener(key, val)
+      }
     }
   }
 
